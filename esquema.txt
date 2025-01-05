@@ -1,0 +1,7 @@
+scraper_api_playwright/
+├── app/
+│   ├── main.py
+│   ├── scraper.py
+│   └── requirements.txt
+├── Dockerfile
+└── .dockerignore
