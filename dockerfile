@@ -1,3 +1,8 @@
+# docker build -t playwright-api:v.0.0.1 .
+# docker tag playwright-api:v.0.0.1 nionmaron/playwright-api:v.0.0.1
+# docker push nionmaron/playwright-api:v.0.0.1
+# docker run -p 8000:8000 nionmaron/playwright-api:v.0.0.1
+
 # Usar uma imagem base com Python
 FROM python:3.11-slim
 

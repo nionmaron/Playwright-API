@@ -1,7 +1,7 @@
 import random
 import time
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
-from markdownify import markdownify as md
+from bs4 import BeautifulSoup
 import logging
 
 # Configurar logging para registrar erros e informações
@@ -73,8 +73,25 @@ def get_text_markdown(url):
                 logger.warning(f"Nenhum conteúdo encontrado nas tags h1, h2, h3 e p em {url}")
                 return f"Erro: Nenhum conteúdo encontrado nas tags h1, h2, h3 e p em {url}."
 
-            # Converter o HTML selecionado para Markdown
-            markdown = md(selected_html)
+            # Parsear o HTML selecionado com BeautifulSoup
+            soup = BeautifulSoup(selected_html, 'html.parser')
+
+            # Construir o Markdown manualmente
+            markdown_lines = []
+            for tag in soup.find_all(['h1', 'h2', 'h3', 'p']):
+                if tag.name == 'h1':
+                    markdown_lines.append(f"# {tag.get_text(strip=True)}\n")
+                elif tag.name == 'h2':
+                    markdown_lines.append(f"## {tag.get_text(strip=True)}\n")
+                elif tag.name == 'h3':
+                    markdown_lines.append(f"### {tag.get_text(strip=True)}\n")
+                elif tag.name == 'p':
+                    paragraph = tag.get_text(strip=True)
+                    if paragraph:
+                        markdown_lines.append(f"{paragraph}\n")
+            
+            # Juntar todas as linhas de Markdown
+            markdown = "\n".join(markdown_lines).strip()
             
             # Introduzir um atraso aleatório entre 2 a 5 segundos para simular comportamento humano
             delay = random.uniform(2, 5)
